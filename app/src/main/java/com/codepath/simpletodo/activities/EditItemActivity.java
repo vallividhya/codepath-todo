@@ -1,4 +1,4 @@
-package com.codepath.simpletodo;
+package com.codepath.simpletodo.activities;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
@@ -6,7 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 
-import static com.codepath.simpletodo.MainActivity.ITEM_NAME;
+import com.codepath.simpletodo.R;
 
 public class EditItemActivity extends AppCompatActivity {
 
@@ -21,7 +21,7 @@ public class EditItemActivity extends AppCompatActivity {
         setContentView(R.layout.activity_edit_item);
 
         Intent intent = getIntent();
-        String itemName = intent.getStringExtra(ITEM_NAME);
+        String itemName = intent.getStringExtra(MainActivity.ITEM_NAME);
         position = intent.getIntExtra(MainActivity.ITEM_POSITION, 0);
         EditText editText = (EditText) findViewById(R.id.etUpdateItem);
         editText.setText(itemName);

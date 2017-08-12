@@ -1,8 +1,6 @@
-package com.codepath.simpletodo;
+package com.codepath.simpletodo.activities;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -11,14 +9,15 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
 
+import com.codepath.simpletodo.R;
+import com.codepath.simpletodo.model.ToDoItem;
+import com.codepath.simpletodo.data.DatabaseHelper;
+
 import org.apache.commons.io.FileUtils;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-
-import static com.codepath.simpletodo.EditItemActivity.EDIT_ITEM_NAME;
-import static com.codepath.simpletodo.EditItemActivity.POS;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -47,7 +46,9 @@ public class MainActivity extends AppCompatActivity {
         String text = etNewItem.getText().toString();
         itemsAdapter.add(text);
         etNewItem.setText("");
-        writeItems();
+        //writeItems();
+        // Write to database
+        writeToDB(text);
     }
 
     private void setupListViewListener() {
@@ -79,8 +80,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_CODE) {
-            String updatedItemName = data.getStringExtra(EDIT_ITEM_NAME);
-            int position = data.getExtras().getInt(POS);
+            String updatedItemName = data.getStringExtra(EditItemActivity.EDIT_ITEM_NAME);
+            int position = data.getExtras().getInt(EditItemActivity.POS);
             items.set(position, updatedItemName);
             itemsAdapter.notifyDataSetChanged();
             writeItems();
@@ -106,5 +107,12 @@ public class MainActivity extends AppCompatActivity {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private void writeToDB(String itemName) {
+        DatabaseHelper dbHelper = DatabaseHelper.getInstance(this);
+        ToDoItem item = new ToDoItem();
+        item.setItemName(itemName);
+        dbHelper.addToDoItem(item);
     }
 }
