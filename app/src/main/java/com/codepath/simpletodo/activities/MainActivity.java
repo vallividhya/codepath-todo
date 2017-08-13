@@ -18,6 +18,7 @@ import org.apache.commons.io.FileUtils;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -35,7 +36,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         lvItems = (ListView) findViewById(R.id.lvItems);
         items = new ArrayList<String>();
-        readItems();
+        //readItems();
+        readFromDB();
         itemsAdapter = new ArrayAdapter<String> (this, android.R.layout.simple_list_item_1, items);
         lvItems.setAdapter(itemsAdapter);
         setupListViewListener();
@@ -114,5 +116,14 @@ public class MainActivity extends AppCompatActivity {
         ToDoItem item = new ToDoItem();
         item.setItemName(itemName);
         dbHelper.addToDoItem(item);
+    }
+
+    private  void readFromDB() {
+        DatabaseHelper dbHelper = DatabaseHelper.getInstance(this);
+        List<ToDoItem> itemsList = dbHelper.getToDoItems();
+        items = new ArrayList<String>();
+        for (ToDoItem item : itemsList) {
+            items.add(item.getItemName());
+        }
     }
 }

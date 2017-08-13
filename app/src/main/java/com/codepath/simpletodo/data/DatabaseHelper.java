@@ -2,12 +2,17 @@ package com.codepath.simpletodo.data;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 import com.codepath.simpletodo.model.ToDoItem;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import static android.app.SearchManager.QUERY;
 import static android.content.ContentValues.TAG;
 
 /**
@@ -83,6 +88,29 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             db.endTransaction();
         }
         Log.d(TAG, "Added todo item!!!");
+    }
+
+    public List<ToDoItem> getToDoItems() {
+        List<ToDoItem> list = new ArrayList<ToDoItem>();
+        String QUERY = "SELECT itemName FROM todo_items;";
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.rawQuery(QUERY, null);
+        try {
+            if (cursor.moveToFirst()) {
+                do {
+                    ToDoItem item = new ToDoItem();
+                    item.setItemName(cursor.getString(cursor.getColumnIndex(KEY_ITEM_NAME)));
+                    list.add(item);
+                } while (cursor.moveToNext());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (cursor != null && !cursor.isClosed()) {
+                cursor.close();
+            }
+        }
+        return list;
     }
 
 }
