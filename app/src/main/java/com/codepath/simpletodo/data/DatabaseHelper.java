@@ -92,13 +92,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public List<ToDoItem> getToDoItems() {
         List<ToDoItem> list = new ArrayList<ToDoItem>();
-        String QUERY = "SELECT itemName FROM todo_items;";
+        String QUERY = "SELECT itemId, itemName FROM todo_items;";
         SQLiteDatabase db = getReadableDatabase();
         Cursor cursor = db.rawQuery(QUERY, null);
         try {
             if (cursor.moveToFirst()) {
                 do {
                     ToDoItem item = new ToDoItem();
+                    item.setItemId(cursor.getInt(cursor.getColumnIndex(KEY_ITEM_ID)));
                     item.setItemName(cursor.getString(cursor.getColumnIndex(KEY_ITEM_NAME)));
                     list.add(item);
                 } while (cursor.moveToNext());
@@ -113,4 +114,17 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return list;
     }
 
+    public int updateToDoItem(ToDoItem toDoItem) {
+        SQLiteDatabase db = getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(KEY_ITEM_NAME, toDoItem.getItemName());
+        String[] args = new String[] {String.valueOf(toDoItem.getItemId())};
+        return db.update(TABLE_TODO_ITEMS, values, KEY_ITEM_ID + " = ?" , args);
+    }
+
+    public int deleteTodoItemFromDatabase(ToDoItem toDoItem) {
+        SQLiteDatabase db = getWritableDatabase();
+        String[] args = new String[] {String.valueOf(toDoItem.getItemId())};
+        return db.delete(TABLE_TODO_ITEMS, KEY_ITEM_ID + " = ?", args);
+    }
 }

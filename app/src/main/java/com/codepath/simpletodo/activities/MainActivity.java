@@ -7,7 +7,9 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.SimpleCursorAdapter;
 
 import com.codepath.simpletodo.R;
 import com.codepath.simpletodo.model.ToDoItem;
@@ -24,10 +26,12 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
     public static final String ITEM_NAME = "com.codepath.simpletodo.ITEM_NAME";
     public static final String ITEM_POSITION = "com.codepath.simpletodo.ITEM_POSITION";
+    public static final String ITEM_ID = "com.codepath.simpletodo.ITEM_ID";
     private final int REQUEST_CODE = 20;
 
-    ArrayList<String> items;
-    ArrayAdapter<String> itemsAdapter;
+    List<ToDoItem> itemsList;
+    ArrayAdapter<ToDoItem> toDoItemArrayAdapter;
+
     ListView lvItems;
 
     @Override
@@ -35,32 +39,34 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         lvItems = (ListView) findViewById(R.id.lvItems);
-        items = new ArrayList<String>();
         //readItems();
+        itemsList = new ArrayList<ToDoItem>();
         readFromDB();
-        itemsAdapter = new ArrayAdapter<String> (this, android.R.layout.simple_list_item_1, items);
-        lvItems.setAdapter(itemsAdapter);
+        toDoItemArrayAdapter = new ArrayAdapter<ToDoItem>(this, android.R.layout.simple_list_item_1, itemsList);
+        lvItems.setAdapter(toDoItemArrayAdapter);
         setupListViewListener();
     }
 
     public void onAddItem(View v) {
         EditText etNewItem = (EditText) findViewById(R.id.etNewItem);
         String text = etNewItem.getText().toString();
-        itemsAdapter.add(text);
+        ToDoItem todo = new ToDoItem();
+        todo.setItemName(text);
+        toDoItemArrayAdapter.add(todo);
         etNewItem.setText("");
-        //writeItems();
         // Write to database
-        writeToDB(text);
+        writeToDB(todo);
     }
 
-    private void setupListViewListener() {
+   private void setupListViewListener() {
         // Listener to delete item on long Click
         lvItems.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> adapterView, View view, int pos, long id) {
-                items.remove(pos);
-                itemsAdapter.notifyDataSetChanged();
-                writeItems();
+                ToDoItem item = (ToDoItem) adapterView.getItemAtPosition(pos);
+                itemsList.remove(pos);
+                toDoItemArrayAdapter.notifyDataSetChanged();
+                deleteTodoItem(item);
                 return true;
             }
         });
@@ -70,12 +76,19 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int pos, long id) {
                 Intent intent = new Intent(MainActivity.this, EditItemActivity.class);
-                String itemName = (String) adapterView.getItemAtPosition(pos);
+                ToDoItem item = (ToDoItem) adapterView.getItemAtPosition(pos);
                 intent.putExtra(ITEM_POSITION, pos);
-                intent.putExtra(ITEM_NAME, itemName);
+                intent.putExtra(ITEM_NAME, item.getItemName());
+                intent.putExtra(ITEM_ID, item.getItemId());
                 startActivityForResult(intent, REQUEST_CODE);
             }
         });
+    }
+
+
+    private void deleteTodoItem(ToDoItem item) {
+        DatabaseHelper dbHelper = DatabaseHelper.getInstance(this);
+        dbHelper.deleteTodoItemFromDatabase(item);
     }
 
     @Override
@@ -83,47 +96,28 @@ public class MainActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_CODE) {
             String updatedItemName = data.getStringExtra(EditItemActivity.EDIT_ITEM_NAME);
+            ToDoItem item = new ToDoItem();
+            item.setItemName(updatedItemName);
+            item.setItemId(data.getExtras().getInt(EditItemActivity.EDIT_ITEM_ID));
             int position = data.getExtras().getInt(EditItemActivity.POS);
-            items.set(position, updatedItemName);
-            itemsAdapter.notifyDataSetChanged();
-            writeItems();
+            itemsList.set(position, item);
+            toDoItemArrayAdapter.notifyDataSetChanged();
+            updateItem(item);
         }
     }
 
-    private void readItems() {
-        File filesDir = getFilesDir();
-        File todoFile = new File(filesDir, "todo.txt");
-        try {
-            items = new ArrayList<String>(FileUtils.readLines(todoFile));
-        } catch (IOException e) {
-            items = new ArrayList<String>();
-            e.printStackTrace();
-        }
-    }
-
-    private void writeItems() {
-        File filesDir = getFilesDir();
-        File todoFile = new File(filesDir, "todo.txt");
-        try {
-            FileUtils.writeLines(todoFile, items);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void writeToDB(String itemName) {
+    private void writeToDB(ToDoItem item) {
         DatabaseHelper dbHelper = DatabaseHelper.getInstance(this);
-        ToDoItem item = new ToDoItem();
-        item.setItemName(itemName);
         dbHelper.addToDoItem(item);
     }
 
     private  void readFromDB() {
         DatabaseHelper dbHelper = DatabaseHelper.getInstance(this);
-        List<ToDoItem> itemsList = dbHelper.getToDoItems();
-        items = new ArrayList<String>();
-        for (ToDoItem item : itemsList) {
-            items.add(item.getItemName());
-        }
+        itemsList = dbHelper.getToDoItems();
+    }
+
+    private void updateItem(ToDoItem item) {
+        DatabaseHelper dbHelper = DatabaseHelper.getInstance(this);
+        dbHelper.updateToDoItem(item);
     }
 }
