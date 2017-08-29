@@ -50,12 +50,14 @@ public class MainActivity extends AppCompatActivity {
     public void onAddItem(View v) {
         EditText etNewItem = (EditText) findViewById(R.id.etNewItem);
         String text = etNewItem.getText().toString();
-        ToDoItem todo = new ToDoItem();
-        todo.setItemName(text);
-        toDoItemArrayAdapter.add(todo);
-        etNewItem.setText("");
-        // Write to database
-        writeToDB(todo);
+        if (!text.isEmpty()) {
+            ToDoItem todo = new ToDoItem();
+            todo.setItemName(text);
+            toDoItemArrayAdapter.add(todo);
+            etNewItem.setText("");
+            // Write to database
+            writeToDB(todo);
+        }
     }
 
    private void setupListViewListener() {

@@ -36,11 +36,14 @@ public class EditItemActivity extends AppCompatActivity {
     public void onSaveEditItem(View view) {
         EditText etNewItem = (EditText) findViewById(R.id.etUpdateItem);
         String text = etNewItem.getText().toString();
-        Intent in = new Intent();
-        in.putExtra(EDIT_ITEM_ID, itemId);
-        in.putExtra(EDIT_ITEM_NAME, text);
-        in.putExtra(POS, position);
-        setResult(RESPONSE_CODE, in);
-        finish();
+        if (!text.isEmpty()) {
+            Intent in = new Intent();
+            in.putExtra(EDIT_ITEM_ID, itemId);
+            in.putExtra(EDIT_ITEM_NAME, text);
+            in.putExtra(POS, position);
+            setResult(RESPONSE_CODE, in);
+            finish();
+        }
+
     }
 }
