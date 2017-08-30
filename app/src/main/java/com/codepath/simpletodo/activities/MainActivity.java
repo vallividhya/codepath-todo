@@ -55,8 +55,10 @@ public class MainActivity extends AppCompatActivity {
         if (!text.isEmpty()) {
             ToDoItem todo = new ToDoItem();
             todo.setItemName(text);
+            todo.setDueDate(System.currentTimeMillis() - 1000);
            // toDoItemArrayAdapter.add(todo);
-            customAdapter.add(todo);
+            itemsList.add(todo);
+            customAdapter.updateList(itemsList);
             etNewItem.setText("");
             lvItems.setSelection(lvItems.getCount() - 1);
             // Write to database
@@ -72,7 +74,7 @@ public class MainActivity extends AppCompatActivity {
                 ToDoItem item = (ToDoItem) adapterView.getItemAtPosition(pos);
                 itemsList.remove(pos);
                 //toDoItemArrayAdapter.notifyDataSetChanged();
-                customAdapter.notifyDataSetChanged();
+                customAdapter.updateList(itemsList);
                 deleteTodoItem(item);
                 return true;
             }
@@ -109,9 +111,10 @@ public class MainActivity extends AppCompatActivity {
             int position = data.getExtras().getInt(EditItemActivity.POS);
             item.setDueDate(data.getExtras().getLong(EditItemActivity.DUE_DATE));
             itemsList.set(position, item);
+            customAdapter.updateList(itemsList);
             //toDoItemArrayAdapter.notifyDataSetChanged();
             updateItem(item);
-            customAdapter.updateList(itemsList);
+
             //customAdapter.notifyDataSetChanged();
         }
     }

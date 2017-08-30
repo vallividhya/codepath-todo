@@ -80,6 +80,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         try {
             ContentValues values = new ContentValues();
             values.put(KEY_ITEM_NAME, toDoItem.getItemName());
+            values.put(KEY_DUE_DATE, toDoItem.getDueDate());
             db.insertOrThrow(TABLE_TODO_ITEMS, null, values);
             db.setTransactionSuccessful();
         } catch (Exception e) {
