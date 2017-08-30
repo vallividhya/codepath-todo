@@ -15,8 +15,8 @@ The following **required** functionality is completed:
 The following **optional** features are implemented:
 
 * [x] Persist the todo items [into SQLite](http://guides.codepath.com/android/Persisting-Data-to-the-Device#sqlite) instead of a text file 
-* [ ] Improve style of the todo items in the list [using a custom adapter](http://guides.codepath.com/android/Using-an-ArrayAdapter-with-ListView)
-* [ ] Add support for completion due dates for todo items (and display within listview item)
+* [x] Improve style of the todo items in the list [using a custom adapter](http://guides.codepath.com/android/Using-an-ArrayAdapter-with-ListView)
+* [x] Add support for completion due dates for todo items (and display within listview item)
 * [ ] Use a [DialogFragment](http://guides.codepath.com/android/Using-DialogFragment) instead of new Activity for editing items
 * [ ] Add support for selecting the priority of each todo item (and display in listview item)
 * [x] Tweak the style improving the UI / UX, play with colors, images or backgrounds
@@ -44,7 +44,8 @@ As part of your pre-work submission, please reflect on the app and answer the fo
 **Question 2:** "Take a moment to reflect on the `ArrayAdapter` used in your pre-work. How would you describe an adapter in this context and what is its function in Android? Why do you think the adapter is important? Explain the purpose of the `convertView` in the `getView` method of the `ArrayAdapter`."
 
 **Answer:** An arrayadapter bridges the user interface components and the data source. The adapter is responsible for providing a view for each item in the data set. It listens to changes in the datasets and reflects them in the user interface.  
-    The adapter plays an important role in the performace and scalability of the listviews, by reusing row views. The getView() method gets any reusable views, if possible. The convertView parameter could be null or could contain a reusuable view. If it is null, the adapter inflates a new view from the XML file. If not null, the convertView contains the reference to the reusable view and eliminates the need to create a new view. 
+    The adapter plays an important role in the performace and scalability of the listviews, by reusing row views. The getView() method gets any reusable views, if possible. The convertView parameter could be null or could contain a reusuable view. If it is null, the adapter inflates a new view from the XML file. If not null, the convertView contains the reference to the reusable view and eliminates the need to create a new view. Inflating a new view would create a new Java object, which is an expensive operation. The convertView, thus, efficiently reuses an old resource. 
+    By overriding this getView() method in the custom array adapter, a custom row view can be inflated in a listview. 
 
 ## License
 
