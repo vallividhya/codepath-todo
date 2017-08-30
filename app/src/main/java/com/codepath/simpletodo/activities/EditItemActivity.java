@@ -22,7 +22,7 @@ public class EditItemActivity extends AppCompatActivity {
     public static final String DUE_DATE = "com.codepath.simpletodo.DUE_DATE";
     private int position = 0;
     int itemId = 0;
-
+    long itemDueDate = System.currentTimeMillis() - 1000;
     private DatePicker datePicker;
 
     @Override
@@ -37,6 +37,10 @@ public class EditItemActivity extends AppCompatActivity {
         String itemName = intent.getStringExtra(MainActivity.ITEM_NAME);
         position = intent.getIntExtra(MainActivity.ITEM_POSITION, 0);
         itemId = intent.getExtras().getInt(MainActivity.ITEM_ID);
+        itemDueDate = intent.getExtras().getLong(MainActivity.ITEM_DUEDATE);
+        Calendar cal = Calendar.getInstance();
+        cal.setTimeInMillis(itemDueDate);
+        datePicker.updateDate(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DATE));
         EditText editText = (EditText) findViewById(R.id.etUpdateItem);
         editText.setText(itemName);
         editText.setSelection(editText.getText().length());

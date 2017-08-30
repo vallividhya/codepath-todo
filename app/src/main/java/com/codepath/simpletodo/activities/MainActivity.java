@@ -28,6 +28,7 @@ public class MainActivity extends AppCompatActivity {
     public static final String ITEM_NAME = "com.codepath.simpletodo.ITEM_NAME";
     public static final String ITEM_POSITION = "com.codepath.simpletodo.ITEM_POSITION";
     public static final String ITEM_ID = "com.codepath.simpletodo.ITEM_ID";
+    public static final String ITEM_DUEDATE = "com.codepath.simpletodo.ITEM_DUEDATE";
     private final int REQUEST_CODE = 20;
 
     List<ToDoItem> itemsList;
@@ -89,6 +90,7 @@ public class MainActivity extends AppCompatActivity {
                 intent.putExtra(ITEM_POSITION, pos);
                 intent.putExtra(ITEM_NAME, item.getItemName());
                 intent.putExtra(ITEM_ID, item.getItemId());
+                intent.putExtra(ITEM_DUEDATE, item.getDueDate());
                 startActivityForResult(intent, REQUEST_CODE);
             }
         });
