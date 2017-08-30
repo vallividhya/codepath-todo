@@ -13,13 +13,15 @@
         android:onClick="onAddItem"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/ic_add_circle_black_36dp"
-        android:background="@null"
+        android:src="@drawable/ic_add_black_24dp"
+        android:background="@drawable/roundcorner"
         android:paddingRight="15dp"
         android:layout_alignTop="@+id/etNewItem"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        android:layout_alignBottom="@+id/etNewItem" />
+        android:layout_alignBottom="@+id/etNewItem"
+        android:tint="@color/colorPrimary"/>
+
     <EditText
         android:id="@+id/etNewItem"
         android:layout_width="295dp"
