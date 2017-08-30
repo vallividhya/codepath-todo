@@ -12,6 +12,7 @@ import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 
 import com.codepath.simpletodo.R;
+import com.codepath.simpletodo.adapters.TodoItemsAdapter;
 import com.codepath.simpletodo.model.ToDoItem;
 import com.codepath.simpletodo.data.DatabaseHelper;
 
@@ -31,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
 
     List<ToDoItem> itemsList;
     ArrayAdapter<ToDoItem> toDoItemArrayAdapter;
-
+    TodoItemsAdapter customAdapter;
     ListView lvItems;
 
     @Override
@@ -41,9 +42,10 @@ public class MainActivity extends AppCompatActivity {
         lvItems = (ListView) findViewById(R.id.lvItems);
         //readItems();
         itemsList = new ArrayList<ToDoItem>();
+        //toDoItemArrayAdapter = new ArrayAdapter<ToDoItem>(this, android.R.layout.simple_list_item_1, itemsList);
+        customAdapter = new TodoItemsAdapter(this, itemsList);
+        lvItems.setAdapter(customAdapter);
         readFromDB();
-        toDoItemArrayAdapter = new ArrayAdapter<ToDoItem>(this, android.R.layout.simple_list_item_1, itemsList);
-        lvItems.setAdapter(toDoItemArrayAdapter);
         setupListViewListener();
     }
 
@@ -53,7 +55,8 @@ public class MainActivity extends AppCompatActivity {
         if (!text.isEmpty()) {
             ToDoItem todo = new ToDoItem();
             todo.setItemName(text);
-            toDoItemArrayAdapter.add(todo);
+           // toDoItemArrayAdapter.add(todo);
+            customAdapter.add(todo);
             etNewItem.setText("");
             lvItems.setSelection(lvItems.getCount() - 1);
             // Write to database
@@ -68,7 +71,8 @@ public class MainActivity extends AppCompatActivity {
             public boolean onItemLongClick(AdapterView<?> adapterView, View view, int pos, long id) {
                 ToDoItem item = (ToDoItem) adapterView.getItemAtPosition(pos);
                 itemsList.remove(pos);
-                toDoItemArrayAdapter.notifyDataSetChanged();
+                //toDoItemArrayAdapter.notifyDataSetChanged();
+                customAdapter.notifyDataSetChanged();
                 deleteTodoItem(item);
                 return true;
             }
@@ -103,9 +107,12 @@ public class MainActivity extends AppCompatActivity {
             item.setItemName(updatedItemName);
             item.setItemId(data.getExtras().getInt(EditItemActivity.EDIT_ITEM_ID));
             int position = data.getExtras().getInt(EditItemActivity.POS);
+            item.setDueDate(data.getExtras().getLong(EditItemActivity.DUE_DATE));
             itemsList.set(position, item);
-            toDoItemArrayAdapter.notifyDataSetChanged();
+            //toDoItemArrayAdapter.notifyDataSetChanged();
             updateItem(item);
+            customAdapter.updateList(itemsList);
+            //customAdapter.notifyDataSetChanged();
         }
     }
 
@@ -117,6 +124,7 @@ public class MainActivity extends AppCompatActivity {
     private  void readFromDB() {
         DatabaseHelper dbHelper = DatabaseHelper.getInstance(this);
         itemsList = dbHelper.getToDoItems();
+        customAdapter.addAll(itemsList);
     }
 
     private void updateItem(ToDoItem item) {
