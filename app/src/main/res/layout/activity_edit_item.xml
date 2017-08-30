@@ -6,42 +6,42 @@
     android:layout_height="match_parent"
     tools:context="com.codepath.simpletodo.activities.EditItemActivity">
 
-
-    <Button
-        android:id="@+id/btnSave"
+    <TextView
+        android:id="@+id/txtViewEditItem"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:layout_marginLeft="23dp"
+        android:layout_marginLeft="323dp"
         android:layout_marginStart="23dp"
-        android:layout_marginTop="197dp"
-        android:text="Save"
-        android:onClick="onSaveEditItem"/>
-
+        android:layout_marginTop="30dp"
+        android:layout_marginBottom="30dp"
+        android:textColor="@color/colorSecondaryText"
+        android:text="Edit Item Below:" />
     <EditText
         android:id="@+id/etUpdateItem"
+        android:layout_below="@+id/txtViewEditItem"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/btnSave"
-        android:layout_alignLeft="@+id/btnSave"
-        android:layout_alignStart="@+id/btnSave"
-        android:layout_marginBottom="94dp"
+        android:layout_alignLeft="@+id/txtViewEditItem"
+        android:layout_marginTop="30dp"
+        android:layout_marginBottom="30dp"
         android:ems="10"
         android:hint="Update item here"
         android:inputType="textMultiLine" />
 
-    <TextView
-        android:id="@+id/txtViewEditItem"
+
+    <ImageButton
+        android:id="@+id/btnSave"
+        android:layout_below="@+id/etUpdateItem"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/etUpdateItem"
-        android:layout_alignEnd="@+id/etUpdateItem"
-        android:layout_alignLeft="@+id/etUpdateItem"
-        android:layout_alignRight="@+id/etUpdateItem"
-        android:layout_alignStart="@+id/etUpdateItem"
-        android:layout_marginBottom="43dp"
-        android:text="Edit Item Below:" />
+        android:layout_marginTop="50dp"
+        android:layout_centerHorizontal="true"
+        android:background="@null"
+        android:onClick="onSaveEditItem"
+        android:src="@drawable/ic_save_black_36dp"
+        android:text="Save" />
 
 </android.widget.RelativeLayout>

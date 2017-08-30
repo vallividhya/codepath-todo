@@ -55,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
             todo.setItemName(text);
             toDoItemArrayAdapter.add(todo);
             etNewItem.setText("");
+            lvItems.setSelection(lvItems.getCount() - 1);
             // Write to database
             writeToDB(todo);
         }
@@ -96,7 +97,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_CODE) {
+        if (requestCode == REQUEST_CODE && data != null) {
             String updatedItemName = data.getStringExtra(EditItemActivity.EDIT_ITEM_NAME);
             ToDoItem item = new ToDoItem();
             item.setItemName(updatedItemName);
