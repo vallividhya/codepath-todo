@@ -11,11 +11,15 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.codepath.simpletodo.R;
+import com.codepath.simpletodo.model.PriorityType;
 import com.codepath.simpletodo.model.ToDoItem;
 
 import org.w3c.dom.Text;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import static android.R.attr.resource;
@@ -49,6 +53,15 @@ public class TodoItemsAdapter extends ArrayAdapter<ToDoItem> {
     }
 
     public void updateList(List<ToDoItem> newlist) {
+
+        Collections.sort(newlist, new Comparator<ToDoItem>() {
+            @Override
+            public int compare(ToDoItem t0, ToDoItem t1) {
+                Integer p0 = PriorityType.valueOf(t0.getPriority()).ordinal();
+                Integer p1 = PriorityType.valueOf(t1.getPriority()).ordinal();
+                return p0.compareTo(p1);
+            }
+        });
         toDoList.clear();
         toDoList.addAll(newlist);
         this.notifyDataSetChanged();

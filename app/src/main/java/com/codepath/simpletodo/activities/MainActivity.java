@@ -22,6 +22,8 @@ import org.apache.commons.io.FileUtils;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 
@@ -134,6 +136,14 @@ public class MainActivity extends AppCompatActivity {
     private  void readFromDB() {
         DatabaseHelper dbHelper = DatabaseHelper.getInstance(this);
         itemsList = dbHelper.getToDoItems();
+        Collections.sort(itemsList, new Comparator<ToDoItem>() {
+            @Override
+            public int compare(ToDoItem t0, ToDoItem t1) {
+                Integer p0 = PriorityType.valueOf(t0.getPriority()).ordinal();
+                Integer p1 = PriorityType.valueOf(t1.getPriority()).ordinal();
+                return p0.compareTo(p1);
+            }
+        });
         customAdapter.addAll(itemsList);
     }
 
