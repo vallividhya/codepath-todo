@@ -13,6 +13,7 @@ import android.widget.SimpleCursorAdapter;
 
 import com.codepath.simpletodo.R;
 import com.codepath.simpletodo.adapters.TodoItemsAdapter;
+import com.codepath.simpletodo.model.PriorityType;
 import com.codepath.simpletodo.model.ToDoItem;
 import com.codepath.simpletodo.data.DatabaseHelper;
 
@@ -29,6 +30,7 @@ public class MainActivity extends AppCompatActivity {
     public static final String ITEM_POSITION = "com.codepath.simpletodo.ITEM_POSITION";
     public static final String ITEM_ID = "com.codepath.simpletodo.ITEM_ID";
     public static final String ITEM_DUEDATE = "com.codepath.simpletodo.ITEM_DUEDATE";
+    public static final String ITEM_PRIORITY = "com.codepath.simpletodo.ITEM_PRIORITY";
     private final int REQUEST_CODE = 20;
 
     List<ToDoItem> itemsList;
@@ -57,6 +59,7 @@ public class MainActivity extends AppCompatActivity {
             ToDoItem todo = new ToDoItem();
             todo.setItemName(text);
             todo.setDueDate(System.currentTimeMillis() - 1000);
+            todo.setPriority(PriorityType.Medium.name());
            // toDoItemArrayAdapter.add(todo);
             itemsList.add(todo);
             customAdapter.updateList(itemsList);
@@ -91,6 +94,7 @@ public class MainActivity extends AppCompatActivity {
                 intent.putExtra(ITEM_NAME, item.getItemName());
                 intent.putExtra(ITEM_ID, item.getItemId());
                 intent.putExtra(ITEM_DUEDATE, item.getDueDate());
+                intent.putExtra(ITEM_PRIORITY, item.getPriority());
                 startActivityForResult(intent, REQUEST_CODE);
             }
         });
@@ -112,6 +116,7 @@ public class MainActivity extends AppCompatActivity {
             item.setItemId(data.getExtras().getInt(EditItemActivity.EDIT_ITEM_ID));
             int position = data.getExtras().getInt(EditItemActivity.POS);
             item.setDueDate(data.getExtras().getLong(EditItemActivity.DUE_DATE));
+            item.setPriority(data.getExtras().getString(EditItemActivity.PRIORITY));
             itemsList.set(position, item);
             customAdapter.updateList(itemsList);
             //toDoItemArrayAdapter.notifyDataSetChanged();

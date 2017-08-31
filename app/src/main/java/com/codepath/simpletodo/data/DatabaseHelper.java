@@ -81,6 +81,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             ContentValues values = new ContentValues();
             values.put(KEY_ITEM_NAME, toDoItem.getItemName());
             values.put(KEY_DUE_DATE, toDoItem.getDueDate());
+            values.put(KEY_PRIORITY, toDoItem.getPriority());
             db.insertOrThrow(TABLE_TODO_ITEMS, null, values);
             db.setTransactionSuccessful();
         } catch (Exception e) {
@@ -93,7 +94,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public List<ToDoItem> getToDoItems() {
         List<ToDoItem> list = new ArrayList<ToDoItem>();
-        String QUERY = "SELECT itemId, itemName, dueDate FROM todo_items;";
+        String QUERY = "SELECT itemId, itemName, dueDate, priority FROM todo_items;";
         SQLiteDatabase db = getReadableDatabase();
         Cursor cursor = db.rawQuery(QUERY, null);
         try {
@@ -103,6 +104,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     item.setItemId(cursor.getInt(cursor.getColumnIndex(KEY_ITEM_ID)));
                     item.setItemName(cursor.getString(cursor.getColumnIndex(KEY_ITEM_NAME)));
                     item.setDueDate(cursor.getLong(cursor.getColumnIndex(KEY_DUE_DATE)));
+                    item.setPriority(cursor.getString(cursor.getColumnIndex(KEY_PRIORITY)));
                     list.add(item);
                 } while (cursor.moveToNext());
             }
@@ -121,6 +123,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         ContentValues values = new ContentValues();
         values.put(KEY_ITEM_NAME, toDoItem.getItemName());
         values.put(KEY_DUE_DATE, toDoItem.getDueDate());
+        values.put(KEY_PRIORITY, toDoItem.getPriority());
         String[] args = new String[] {String.valueOf(toDoItem.getItemId())};
         return db.update(TABLE_TODO_ITEMS, values, KEY_ITEM_ID + " = ?" , args);
     }

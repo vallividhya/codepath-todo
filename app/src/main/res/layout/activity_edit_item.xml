@@ -32,18 +32,41 @@
         android:hint="Update item here"
         android:inputType="textMultiLine" />
 
+    <LinearLayout
+        android:id="@+id/editViewLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/etUpdateItem">
+
+        <TextView
+            android:id="@+id/txtPriority"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:textColor="@color/colorSecondaryText"
+            android:text="Priority:" />
+        <Spinner
+            android:id="@+id/spPriority"
+            android:layout_alignTop="@id/txtPriority"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="5dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/txtViewEditItem" />
+    </LinearLayout>
+
+
     <DatePicker
         android:id="@+id/dpDueDate"
-        android:layout_below="@+id/etUpdateItem"
+        android:layout_below="@+id/editViewLayout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:scaleY="0.85"
-        android:scaleX="0.85"
         android:layout_marginLeft="30dp"
         android:layout_marginRight="30dp"
         android:layout_marginTop="10dp"
-        android:layout_marginBottom="20dp"
-        />
+        android:layout_marginBottom="20dp"/>
 
     <Button
         android:id="@+id/btnSave"
@@ -55,13 +78,15 @@
         android:layout_marginTop="15dp"
         android:layout_marginBottom="10dp"
         android:layout_marginRight="10dp"
-        android:background="?android:attr/selectableItemBackground"
+
+        android:background="@drawable/roundcorner"
         android:onClick="onSaveEditItem"
         android:drawableTop="@drawable/ic_save_black_24dp"
         android:drawableBottom="@color/colorBackground"
         android:drawablePadding="-45sp"
         android:text="Save"
         android:textSize="12dp"
-        style="?android:attr/borderlessButtonStyle"/>
+        android:tint="@color/colorPrimary"
+        />
 
 </android.widget.RelativeLayout>

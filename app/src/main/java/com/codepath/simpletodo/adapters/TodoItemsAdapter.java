@@ -41,9 +41,10 @@ public class TodoItemsAdapter extends ArrayAdapter<ToDoItem> {
         }
         TextView tvItemName = (TextView) convertView.findViewById(R.id.tvItemName);
         TextView tvDueDate = (TextView) convertView.findViewById(R.id.tvDueDate);
-
+        TextView tvPriority = (TextView) convertView.findViewById(R.id.tvPriority);
         tvItemName.setText(item.getItemName());
         tvDueDate.setText("Due: " + item.getAboutDate());
+        tvPriority.setText("Priority: " + item.getPriority());
         return convertView;
     }
 
