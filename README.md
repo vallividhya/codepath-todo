@@ -2,7 +2,7 @@
 
 Submitted by: Valli Vidhya Venkatesan
 
-Time spent: 19 hours spent in total
+Time spent: 20 hours spent in total
 
 ## User Stories
 
@@ -23,13 +23,13 @@ The following **optional** features are implemented:
 
 The following **additional** features are implemented:
 
-* [ ] List anything else that you can get done to improve the app functionality!
+* [ ] List anything else that you can get done to improve the app functionality! (In progress)
 
 ## Video Walkthrough
 
 Here's a walkthrough of implemented user stories:
 
-<img src='http://i.imgur.com/upkKadr.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
+<img src='http://i.imgur.com/gief9SE.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
 
 GIF created with [LiceCap](http://www.cockos.com/licecap/).
 
