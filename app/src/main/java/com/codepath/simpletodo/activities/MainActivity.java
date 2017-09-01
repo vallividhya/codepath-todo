@@ -7,20 +7,14 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
-import android.widget.ListAdapter;
 import android.widget.ListView;
-import android.widget.SimpleCursorAdapter;
 
 import com.codepath.simpletodo.R;
 import com.codepath.simpletodo.adapters.TodoItemsAdapter;
-import com.codepath.simpletodo.model.PriorityType;
+import com.codepath.simpletodo.model.ItemPriority;
 import com.codepath.simpletodo.model.ToDoItem;
 import com.codepath.simpletodo.data.DatabaseHelper;
 
-import org.apache.commons.io.FileUtils;
-
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -61,7 +55,8 @@ public class MainActivity extends AppCompatActivity {
             ToDoItem todo = new ToDoItem();
             todo.setItemName(text);
             todo.setDueDate(System.currentTimeMillis() - 1000);
-            todo.setPriority(PriorityType.Medium.name());
+            todo.setPriority(ItemPriority.Medium.name());
+
            // toDoItemArrayAdapter.add(todo);
             itemsList.add(todo);
             customAdapter.updateList(itemsList);
@@ -136,14 +131,7 @@ public class MainActivity extends AppCompatActivity {
     private  void readFromDB() {
         DatabaseHelper dbHelper = DatabaseHelper.getInstance(this);
         itemsList = dbHelper.getToDoItems();
-        Collections.sort(itemsList, new Comparator<ToDoItem>() {
-            @Override
-            public int compare(ToDoItem t0, ToDoItem t1) {
-                Integer p0 = PriorityType.valueOf(t0.getPriority()).ordinal();
-                Integer p1 = PriorityType.valueOf(t1.getPriority()).ordinal();
-                return p0.compareTo(p1);
-            }
-        });
+        Collections.sort(itemsList);
         customAdapter.addAll(itemsList);
     }
 

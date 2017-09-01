@@ -11,12 +11,9 @@ import android.widget.EditText;
 import android.widget.Spinner;
 
 import com.codepath.simpletodo.R;
-import com.codepath.simpletodo.model.PriorityType;
+import com.codepath.simpletodo.model.ItemPriority;
 
 import java.util.Calendar;
-
-import static android.R.attr.id;
-import static android.R.attr.priority;
 
 public class EditItemActivity extends AppCompatActivity {
 
@@ -32,7 +29,7 @@ public class EditItemActivity extends AppCompatActivity {
     long itemDueDate = System.currentTimeMillis() - 1000;
     private DatePicker datePicker;
     Spinner spinner;
-    CharSequence priority = PriorityType.Medium.name();
+    CharSequence priority = ItemPriority.Medium.name();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,7 +63,7 @@ public class EditItemActivity extends AppCompatActivity {
         itemId = intent.getExtras().getInt(MainActivity.ITEM_ID);
         itemDueDate = intent.getExtras().getLong(MainActivity.ITEM_DUEDATE);
         priority = intent.getStringExtra(MainActivity.ITEM_PRIORITY);
-        spinner.setSelection(PriorityType.valueOf((String) priority).ordinal());
+        spinner.setSelection(ItemPriority.valueOf((String) priority).ordinal());
         Calendar cal = Calendar.getInstance();
         cal.setTimeInMillis(itemDueDate);
         datePicker.updateDate(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DATE));

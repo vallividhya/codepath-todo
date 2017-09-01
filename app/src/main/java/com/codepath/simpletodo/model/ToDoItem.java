@@ -1,5 +1,7 @@
 package com.codepath.simpletodo.model;
 
+import android.support.annotation.NonNull;
+
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
@@ -8,7 +10,7 @@ import java.util.Locale;
  * Created by vidhya on 8/11/17.
  */
 
-public class ToDoItem {
+public class ToDoItem implements Comparable<ToDoItem> {
     private int itemId;
     private String itemName;
     private String notes;
@@ -74,5 +76,14 @@ public class ToDoItem {
     @Override
     public String toString() {
         return itemName;
+    }
+
+    @Override
+    public int compareTo(@NonNull ToDoItem other) {
+        int compare = getDueDate().compareTo(other.getDueDate());
+        if (compare == 0) {
+            compare = ItemPriority.valueOf(other.getPriority()).compare(ItemPriority.valueOf(getPriority()));
+        }
+        return compare;
     }
 }
