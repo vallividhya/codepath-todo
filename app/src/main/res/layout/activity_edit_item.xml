@@ -6,7 +6,16 @@
     android:layout_height="match_parent"
     tools:context="com.codepath.simpletodo.activities.EditItemActivity">
 
-    <TextView
+    <!--<android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        android:elevation="4dp"
+        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/> -->
+
+    <!--<TextView
         android:id="@+id/txtViewEditItem"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -17,19 +26,18 @@
         android:layout_marginTop="15dp"
         android:layout_marginBottom="5dp"
         android:textColor="@color/colorSecondaryText"
-        android:text="Edit Item Below:" />
+        android:text="Edit Item Below:" /> -->
 
     <EditText
         android:id="@+id/etUpdateItem"
-        android:layout_below="@+id/txtViewEditItem"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/txtViewEditItem"
         android:layout_marginTop="10dp"
+        android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:layout_marginBottom="5dp"
         android:ems="10"
-        android:hint="Update item here"
+        android:hint="What would you like to do?"
         android:inputType="textMultiLine" />
 
     <LinearLayout
@@ -69,9 +77,9 @@
         android:scaleX="0.9"
         android:scaleY="0.9"/>
 
-    <Button
+    <!--<Button
         android:id="@+id/btnSave"
-        android:layout_alignRight="@+id/txtViewEditItem"
+        android:layout_alignRight="@+id/etUpdateItem"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
         android:layout_width="wrap_content"
@@ -88,6 +96,6 @@
         android:text="Save"
         android:textSize="12dp"
         android:tint="@color/colorPrimary"
-        />
+        /> -->
 
 </android.widget.RelativeLayout>

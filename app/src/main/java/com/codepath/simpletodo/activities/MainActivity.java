@@ -28,6 +28,7 @@ public class MainActivity extends AppCompatActivity {
     public static final String ITEM_DUEDATE = "com.codepath.simpletodo.ITEM_DUEDATE";
     public static final String ITEM_PRIORITY = "com.codepath.simpletodo.ITEM_PRIORITY";
     private final int REQUEST_CODE = 20;
+    private final int REQUEST_CODE1 = 10;
 
     List<ToDoItem> itemsList;
     ArrayAdapter<ToDoItem> toDoItemArrayAdapter;
@@ -49,7 +50,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onAddItem(View v) {
-        EditText etNewItem = (EditText) findViewById(R.id.etNewItem);
+
+        Intent intent = new Intent(MainActivity.this, EditItemActivity.class);
+        startActivityForResult(intent, REQUEST_CODE1);
+
+        /*EditText etNewItem = (EditText) findViewById(R.id.etNewItem);
         String text = etNewItem.getText().toString();
         if (!text.isEmpty()) {
             ToDoItem todo = new ToDoItem();
@@ -64,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
             lvItems.setSelection(lvItems.getCount() - 1);
             // Write to database
             writeToDB(todo);
-        }
+        } */
     }
 
    private void setupListViewListener() {
@@ -106,6 +111,19 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_CODE1 && data != null) {
+            String updatedItemName = data.getStringExtra(EditItemActivity.EDIT_ITEM_NAME);
+            ToDoItem item = new ToDoItem();
+            item.setItemName(updatedItemName);
+            item.setDueDate(data.getExtras().getLong(EditItemActivity.DUE_DATE));
+            item.setPriority(data.getExtras().getString(EditItemActivity.PRIORITY));
+            itemsList.add(item);
+            customAdapter.updateList(itemsList);
+            lvItems.setSelection(lvItems.getCount() - 1);
+            // Write to database
+            writeToDB(item);
+        }
+
         if (requestCode == REQUEST_CODE && data != null) {
             String updatedItemName = data.getStringExtra(EditItemActivity.EDIT_ITEM_NAME);
             ToDoItem item = new ToDoItem();

@@ -3,6 +3,8 @@ package com.codepath.simpletodo.activities;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -58,21 +60,41 @@ public class EditItemActivity extends AppCompatActivity {
         datePicker.setMinDate(System.currentTimeMillis() - 1000);
 
         Intent intent = getIntent();
-        String itemName = intent.getStringExtra(MainActivity.ITEM_NAME);
-        position = intent.getIntExtra(MainActivity.ITEM_POSITION, 0);
-        itemId = intent.getExtras().getInt(MainActivity.ITEM_ID);
-        itemDueDate = intent.getExtras().getLong(MainActivity.ITEM_DUEDATE);
-        priority = intent.getStringExtra(MainActivity.ITEM_PRIORITY);
-        spinner.setSelection(ItemPriority.valueOf((String) priority).ordinal());
-        Calendar cal = Calendar.getInstance();
-        cal.setTimeInMillis(itemDueDate);
-        datePicker.updateDate(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DATE));
-        EditText editText = (EditText) findViewById(R.id.etUpdateItem);
-        editText.setText(itemName);
-        editText.setSelection(editText.getText().length());
+        if (intent.getExtras() != null) {
+            // Updating an item
+            String itemName = intent.getStringExtra(MainActivity.ITEM_NAME);
+            position = intent.getIntExtra(MainActivity.ITEM_POSITION, 0);
+            itemId = intent.getExtras().getInt(MainActivity.ITEM_ID);
+            itemDueDate = intent.getExtras().getLong(MainActivity.ITEM_DUEDATE);
+            priority = intent.getStringExtra(MainActivity.ITEM_PRIORITY);
+            spinner.setSelection(ItemPriority.valueOf((String) priority).ordinal());
+            Calendar cal = Calendar.getInstance();
+            cal.setTimeInMillis(itemDueDate);
+            datePicker.updateDate(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DATE));
+            EditText editText = (EditText) findViewById(R.id.etUpdateItem);
+            editText.setText(itemName);
+            editText.setSelection(editText.getText().length());
+        }
     }
 
-    public void onSaveEditItem(View view) {
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menuitems, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_save:
+                onSaveEditItem();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    public void onSaveEditItem() {
         EditText etNewItem = (EditText) findViewById(R.id.etUpdateItem);
         String text = etNewItem.getText().toString();
         int day = datePicker.getDayOfMonth();
