@@ -24,6 +24,7 @@ The following **optional** features are implemented:
 The following **additional** features are implemented:
 
 * [x] Tweaked UI to follow material design
+* [x] Notifications to remind user at 7 AM every morning about the tasks of the day. (Not shown in the gif)
 
 ## Video Walkthrough
 
