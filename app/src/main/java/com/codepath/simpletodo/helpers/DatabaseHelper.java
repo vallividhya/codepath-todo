@@ -1,4 +1,4 @@
-package com.codepath.simpletodo.data;
+package com.codepath.simpletodo.helpers;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -10,6 +10,7 @@ import android.util.Log;
 import com.codepath.simpletodo.model.ToDoItem;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import static android.app.SearchManager.QUERY;
@@ -118,6 +119,46 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return list;
     }
 
+    public String[] getToDoItemsDueToday() {
+        List<String> list = new ArrayList<String>();
+        Calendar c = Calendar.getInstance();
+
+        c.set(Calendar.HOUR_OF_DAY, 0);
+        c.set(Calendar.MINUTE, 0);
+        c.set(Calendar.SECOND, 0);
+        c.set(Calendar.MILLISECOND, 0);
+        long midNightTime = c.getTimeInMillis();
+
+        c = Calendar.getInstance();
+
+        c.set(Calendar.HOUR_OF_DAY, 23);
+        c.set(Calendar.MINUTE, 59);
+        c.set(Calendar.SECOND, 59);
+        c.set(Calendar.MILLISECOND, 999);
+        long endOfDayTime = c.getTimeInMillis();
+
+        String QUERY = "SELECT itemName FROM todo_items WHERE dueDate BETWEEN " + midNightTime + " AND " + endOfDayTime ;
+
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.rawQuery(QUERY, null);
+        try {
+            if (cursor.moveToFirst()) {
+                do {
+                    ToDoItem item = new ToDoItem();
+                    item.setItemName(cursor.getString(cursor.getColumnIndex(KEY_ITEM_NAME)));
+                    list.add(item.getItemName());
+                } while (cursor.moveToNext());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (cursor != null && !cursor.isClosed()) {
+                cursor.close();
+            }
+        }
+        return list.toArray(new String[list.size()]);
+    }
+
     public int updateToDoItem(ToDoItem toDoItem) {
         SQLiteDatabase db = getWritableDatabase();
         ContentValues values = new ContentValues();
@@ -133,4 +174,5 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         String[] args = new String[] {String.valueOf(toDoItem.getItemId())};
         return db.delete(TABLE_TODO_ITEMS, KEY_ITEM_ID + " = ?", args);
     }
+
 }

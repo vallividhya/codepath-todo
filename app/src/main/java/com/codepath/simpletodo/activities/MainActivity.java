@@ -1,23 +1,25 @@
 package com.codepath.simpletodo.activities;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.EditText;
 import android.widget.ListView;
 
 import com.codepath.simpletodo.R;
 import com.codepath.simpletodo.adapters.TodoItemsAdapter;
-import com.codepath.simpletodo.model.ItemPriority;
 import com.codepath.simpletodo.model.ToDoItem;
-import com.codepath.simpletodo.data.DatabaseHelper;
+import com.codepath.simpletodo.helpers.DatabaseHelper;
+import com.codepath.simpletodo.receivers.AlarmReceiver;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 
@@ -40,36 +42,18 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         lvItems = (ListView) findViewById(R.id.lvItems);
-        //readItems();
         itemsList = new ArrayList<ToDoItem>();
-        //toDoItemArrayAdapter = new ArrayAdapter<ToDoItem>(this, android.R.layout.simple_list_item_1, itemsList);
         customAdapter = new TodoItemsAdapter(this, itemsList);
         lvItems.setAdapter(customAdapter);
         readFromDB();
         setupListViewListener();
+        scheduleAlarm();
     }
 
-    public void onAddItem(View v) {
 
+    public void onAddItem(View v) {
         Intent intent = new Intent(MainActivity.this, EditItemActivity.class);
         startActivityForResult(intent, REQUEST_CODE1);
-
-        /*EditText etNewItem = (EditText) findViewById(R.id.etNewItem);
-        String text = etNewItem.getText().toString();
-        if (!text.isEmpty()) {
-            ToDoItem todo = new ToDoItem();
-            todo.setItemName(text);
-            todo.setDueDate(System.currentTimeMillis() - 1000);
-            todo.setPriority(ItemPriority.Medium.name());
-
-           // toDoItemArrayAdapter.add(todo);
-            itemsList.add(todo);
-            customAdapter.updateList(itemsList);
-            etNewItem.setText("");
-            lvItems.setSelection(lvItems.getCount() - 1);
-            // Write to database
-            writeToDB(todo);
-        } */
     }
 
    private void setupListViewListener() {
@@ -79,7 +63,6 @@ public class MainActivity extends AppCompatActivity {
             public boolean onItemLongClick(AdapterView<?> adapterView, View view, int pos, long id) {
                 ToDoItem item = (ToDoItem) adapterView.getItemAtPosition(pos);
                 itemsList.remove(pos);
-                //toDoItemArrayAdapter.notifyDataSetChanged();
                 customAdapter.updateList(itemsList);
                 deleteTodoItem(item);
                 return true;
@@ -102,6 +85,19 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    public void scheduleAlarm() {
+        Calendar c = Calendar.getInstance();
+        c.set(Calendar.HOUR_OF_DAY, 7);
+        c.set(Calendar.MINUTE, 0);
+        c.set(Calendar.SECOND, 0);
+        c.set(Calendar.MILLISECOND, 0);
+        long timeInMillis = c.getTimeInMillis();
+
+        Intent intent = new Intent(getApplicationContext(), AlarmReceiver.class);
+        final PendingIntent pendingIntent = PendingIntent.getBroadcast(this, AlarmReceiver.REQUEST_CODE, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        AlarmManager am = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);
+        am.setInexactRepeating(AlarmManager.RTC_WAKEUP, timeInMillis, AlarmManager.INTERVAL_DAY, pendingIntent);
+    }
 
     private void deleteTodoItem(ToDoItem item) {
         DatabaseHelper dbHelper = DatabaseHelper.getInstance(this);
@@ -134,10 +130,7 @@ public class MainActivity extends AppCompatActivity {
             item.setPriority(data.getExtras().getString(EditItemActivity.PRIORITY));
             itemsList.set(position, item);
             customAdapter.updateList(itemsList);
-            //toDoItemArrayAdapter.notifyDataSetChanged();
             updateItem(item);
-
-            //customAdapter.notifyDataSetChanged();
         }
     }
 
@@ -157,4 +150,5 @@ public class MainActivity extends AppCompatActivity {
         DatabaseHelper dbHelper = DatabaseHelper.getInstance(this);
         dbHelper.updateToDoItem(item);
     }
+
 }
