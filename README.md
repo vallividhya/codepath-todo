@@ -2,7 +2,7 @@
 
 Submitted by: Valli Vidhya Venkatesan
 
-Time spent: 22 hours spent in total
+Time spent: 26 hours spent in total
 
 ## User Stories
 
@@ -24,13 +24,13 @@ The following **optional** features are implemented:
 The following **additional** features are implemented:
 
 * [x] Tweaked UI to follow material design
-* [x] Notifications to remind the user at 7 AM every morning about the tasks of the day. (Not shown in the gif)
+* [x] Notifications to remind the user at 7 AM every morning about the tasks of the day.
 
 ## Video Walkthrough
 
 Here's a walkthrough of implemented user stories:
 
-<img src='http://i.imgur.com/x9HVRRu.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
+<img src='http://i.imgur.com/m3PBxnq.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
 
 GIF created with [LiceCap](http://www.cockos.com/licecap/).
 
