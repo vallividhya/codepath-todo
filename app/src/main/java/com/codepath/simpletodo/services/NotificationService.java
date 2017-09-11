@@ -5,8 +5,10 @@ import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Intent;
+import android.graphics.Color;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 
 import com.codepath.simpletodo.R;
@@ -38,21 +40,30 @@ public class NotificationService extends IntentService {
         String channelId = "channel1";
 
         PendingIntent contentIntent = PendingIntent.getActivity(this, 0, new Intent(this, MainActivity.class), PendingIntent.FLAG_CANCEL_CURRENT);
+
+        String[] items = getItemsDueToday();
+
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, channelId)
                 .setSmallIcon(icon)
-                .setContentTitle("You have some items due today")
+                .setContentTitle("Add items to your Get It Done list")
                 .setContentIntent(contentIntent)
                 .setAutoCancel(true);
-        NotificationCompat.InboxStyle inboxStyle = new NotificationCompat.InboxStyle();
-        String[] items = getItemsDueToday();
-        inboxStyle.setBigContentTitle("Items due today:");
-        for (int i = 0; i < items.length; i++) {
-            inboxStyle.addLine((i+1) + ". " + items[i]);
-        }
-        builder.setStyle(inboxStyle);
 
+        if (items.length > 0) {
+            builder.setContentTitle("You have some items due today");
+
+            NotificationCompat.InboxStyle inboxStyle = new NotificationCompat.InboxStyle();
+            inboxStyle.setBigContentTitle("Items due today:");
+            for (int i = 0; i < items.length; i++) {
+                inboxStyle.addLine((i+1) + ". " + items[i]);
+            }
+            builder.setStyle(inboxStyle);
+        } else {
+            builder.setContentTitle("Add items to your 'Get It Done' list");
+        }
         NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         notificationManager.notify(NOTIFICATION_ID, builder.build());
+
     }
 
     private String[] getItemsDueToday() {
